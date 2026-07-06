@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# STRIDE
+
+DETAILS MAKE THE MAN
+
+A full-cycle men's fashion e-commerce storefront built as a portfolio project — covering product browsing, cart, authentication, checkout, and order history end-to-end.
+
+🚧 **Status:** In active development
+
+## Overview
+
+STRIDE is a men's fashion storefront covering four categories — shirts, shoes, watches, and sunglasses — sourced from the DummyJSON API. The project demonstrates a complete e-commerce flow: browsing products, managing a cart, signing up and signing in, checking out, and reviewing past orders.
+
+This is a learning-by-building project — features like authentication are implemented just-in-time as the build progresses, rather than fully planned out in advance.
+
+## Tech Stack
+
+| Layer            | Choice                                 |
+| :--------------- | :------------------------------------- |
+| Framework        | Next.js (App Router) \+ TypeScript     |
+| Styling          | Tailwind CSS                           |
+| State management | Zustand                                |
+| Auth & Database  | Supabase (Auth \+ Postgres)            |
+| Validation       | Zod                                    |
+| Icons            | Lucide                                 |
+| Product data     | [DummyJSON](https://dummyjson.com) API |
+
+## Progress
+
+- [x] Project scaffolding (Next.js \+ TypeScript \+ Tailwind)
+- [x] Landing page — Navbar, Hero, category grid, newsletter signup, Footer
 
 ## Getting Started
 
-First, run the development server:
+git clone \<https://github.com/Abdalla2200/Stride\>
 
-```bash
+cd stride
+
+npm install
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Environment variables (Supabase keys) will be documented here once auth is wired up.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Notes on Data
 
-## Learn More
+Product data comes from the public [DummyJSON](https://dummyjson.com) API across four categories: `mens-shirts`, `mens-shoes`, `mens-watches`, and `sunglasses`. Cart, checkout, and payment actions are simulated for demonstration purposes — nothing writes back to a real backend or processes real payments.
 
-To learn more about Next.js, take a look at the following resources:
+## Design
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+UI designed in Google Stitch, covering Home, Category Listing, Product Detail, Cart, Sign Up, Sign In, Checkout, and Order Confirmation screens.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+_This README is updated as each part of the project is completed._
