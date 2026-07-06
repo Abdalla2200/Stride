@@ -1,71 +1,40 @@
 @import "tailwindcss";
 
 @theme {
-    --color-primary-bg: #0d0f14;
-    --color-secondary-bg: #151820;
-    --color-tertiary: #252a3a;
-    --color-border: #1e2130;
-    --color-accent: #6ee7b7;
-    --color-primary-tx: #f1f5f9;
-    --color-secondary-tx: #94a3b8;
-    --color-muted: #111827;
-  
-    --font-inter: "Inter", sans-serif;
-  
-    --spacing-sectionPadding: 50px;
-    --spacing-sectionPadding-mob: 30px;
-    --spacing-sectionMargine: 50px;
-    --spacing-sectionMargine-mob: 30px;
+  /* Background Colors */
+
+  --color-primary-bg: #ffffff;
+  --color-secondary-bg: #f4f3f0;
+  --color-inverse: #111111;
+  --color-accent: #d9b77a;
+
+  /* ------------------------------- */
+
+  /* Text Colors */
+
+  --color-primary-tx: #1a1a1a;
+  --color-secondary-tx: #55534f;
+  --color-muted: #9b9a94;
+
+  /* --------------------------------- */
+
+  /* Sections Padding & Margin */
+
+  --spacing-sectionPadding: 50px;
+  --spacing-sectionPadding-mob: 30px;
+  --spacing-sectionMargine: 50px;
+  --spacing-sectionMargine-mob: 30px;
+}
+
+@layer base {
+  .container {
+    @apply px-4 mx-auto max-w-[540px] sm:max-w-[720px] md:max-w-[960px] lg:max-w-[1140px] xl:max-w-[1320px];
   }
-  
-  @layer base {
-    .container {
-      @apply px-4 mx-auto max-w-[540px] sm:max-w-[720px] md:max-w-[960px] lg:max-w-[1140px] xl:max-w-[1320px];
-    }
-    html {
-      scroll-behavior: smooth;
-    }
-  
-    body {
-      background-color: var(--color-primary-bg);
-      color: var(--color-primary-tx);
-      font-family: var(--font-cairo);
-    }
-  
-    button {
-      cursor: pointer;
-    }
+  html {
+    scroll-behavior: smooth;
   }
-  
-  @layer utilities {
-    /* Themed scrollbars for dark panels (lessons list, etc.) */
-    .scrollbar-panel {
-      scrollbar-gutter: stable;
-      scrollbar-width: thin;
-      scrollbar-color: var(--color-tertiary) transparent;
-    }
-  
-    .scrollbar-panel::-webkit-scrollbar {
-      width: 7px;
-    }
-  
-    .scrollbar-panel::-webkit-scrollbar-track {
-      background: transparent;
-      margin-block: 4px;
-    }
-  
-    .scrollbar-panel::-webkit-scrollbar-thumb {
-      background-color: var(--color-tertiary);
-      border-radius: 9999px;
-      border: 2px solid transparent;
-      background-clip: padding-box;
-    }
-  
-    .scrollbar-panel::-webkit-scrollbar-thumb:hover {
-      background-color: color-mix(
-        in srgb,
-        var(--color-accent) 45%,
-        var(--color-tertiary)
-      );
-    }
+
+  button {
+    cursor: pointer;
   }
+}
