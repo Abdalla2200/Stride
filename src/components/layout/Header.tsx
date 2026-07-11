@@ -5,12 +5,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight, Menu, Search, X } from "lucide-react";
 import CartIcon from "../cart/CartIcon";
+import headerLogoImg from "../../assets/headerLogo.png";
+import Image from "next/image";
 
 const navLinks = [
   { title: "HOME", href: "/" },
-  { title: "SHIRTS", href: "/category/shirts" },
-  { title: "SHOES", href: "/category/shoes" },
-  { title: "WATCHES", href: "/category/watches" },
+  { title: "SHIRTS", href: "/category/mens-shirts" },
+  { title: "SHOES", href: "/category/mens-shoes" },
+  { title: "WATCHES", href: "/category/mens-watches" },
   { title: "SUNGLASSES", href: "/category/sunglasses" },
 ];
 
@@ -31,11 +33,12 @@ export default function Header() {
     <header className="relative z-50 bg-inverse py-2">
       {/* Desktop navigation */}
       <nav className="container hidden items-center justify-between gap-4 py-2 md:flex">
-        <Link
-          href="/"
-          className="text-[28px] font-bold tracking-[-1.2px] text-primary-bg"
-        >
-          STRIDE
+        <Link href="/">
+          <Image
+            src={headerLogoImg}
+            alt="Stride Logo"
+            className="object-cover w-[140px]"
+          />
         </Link>
 
         <ul className="flex items-center gap-4 md:gap-8">

@@ -19,7 +19,7 @@ export default function Hero() {
           DETAILS MAKE <br />
           THE MAN.
         </h1>
-        <p className="text-primary-bg/85 leading-[24px] max-w-[440px] mb-10">
+        <p className="text-primary-bg/90 leading-[24px] max-w-[440px] mb-10">
           Curated shirts, shoes, watches, and eyewear for men who don&apos;t
           settle for anything less than perfection.
         </p>

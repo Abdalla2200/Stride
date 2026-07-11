@@ -3,13 +3,14 @@ import shoesImg from "../../assets/shoes.png";
 import watchesImg from "../../assets/watches.png";
 import sunglassesImg from "../../assets/sunglasses.png";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function LandingCategories() {
   const categoriyList = [
-    { title: "SHIRTS", image: shirtsImg },
-    { title: "SHOES", image: shoesImg },
-    { title: "WATCHES", image: watchesImg },
-    { title: "SUNGLASSES", image: sunglassesImg },
+    { title: "SHIRTS", image: shirtsImg, href: "/category/mens-shirts" },
+    { title: "SHOES", image: shoesImg, href: "/category/mens-shoes" },
+    { title: "WATCHES", image: watchesImg, href: "/category/mens-watches" },
+    { title: "SUNGLASSES", image: sunglassesImg, href: "/category/sunglasses" },
   ];
 
   return (
@@ -22,9 +23,10 @@ export default function LandingCategories() {
       </h1>
       <div className="grid items-center w-[75%] sm:w-full mx-auto gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {categoriyList.map((category) => (
-          <div
+          <Link
+            href={category.href}
             key={category.title}
-            className="overflow-hidden rounded-xl relative max-h-[450px] cursor-pointer group"
+            className="overflow-hidden rounded-xl relative max-h-[450px] cursor-pointer group block"
           >
             <Image
               src={category.image}
@@ -36,7 +38,7 @@ export default function LandingCategories() {
             <p className="absolute left-8 bottom-8 text-primary-bg font-bold text-2xl z-20">
               {category.title}
             </p>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
