@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Product } from "@/types";
 import { formatPrice } from "@/utils/utils";
 import StarRating from "./StartRating";
+import AddToCartBtn from "../cart/AddToCartBtn";
 
 export default function ProductCard({ product }: { product: Product }) {
   const hasDiscount = product.discountPercentage > 0;
@@ -55,13 +56,7 @@ export default function ProductCard({ product }: { product: Product }) {
             </span>
           )}
         </div>
-
-        <button
-          type="button"
-          className="mt-auto w-full rounded-lg bg-inverse py-2.5 text-sm font-semibold text-primary-bg duration-300 hover:bg-inverse/90 active:scale-[0.98]"
-        >
-          Add to Cart
-        </button>
+        <AddToCartBtn product={product} />
       </div>
     </article>
   );

@@ -36,6 +36,7 @@ export default function Header() {
         <Link href="/">
           <Image
             src={headerLogoImg}
+            loading="eager"
             alt="Stride Logo"
             className="object-cover w-[140px]"
           />

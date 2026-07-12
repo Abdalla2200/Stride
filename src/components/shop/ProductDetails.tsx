@@ -6,7 +6,9 @@ import { useState } from "react";
 import { ChevronRight, Minus, Plus } from "lucide-react";
 import { Product } from "@/types";
 import { getCategoryMeta } from "@/constants/categories";
+import { useCartStore } from "@/store/cartStore";
 import { formatPrice } from "@/utils/utils";
+import { useHydrated } from "@/utils/useHydrated";
 import StarRating from "./StartRating";
 
 type Tab = "description" | "specifications" | "reviews";
@@ -16,6 +18,15 @@ export default function ProductDetails({ product }: { product: Product }) {
     product.images.length > 0 ? product.images : [product.thumbnail];
   const [activeImage, setActiveImage] = useState(0);
   const [activeTab, setActiveTab] = useState<Tab>("description");
+  const isHydrated = useHydrated();
+  const quantity = useCartStore(
+    (state) => state.items.find((item) => item.id === product.id)?.quantity ?? 0,
+  );
+  const addToCart = useCartStore((state) => state.addToCart);
+  const increaseQty = useCartStore((state) => state.increaseQty);
+  const decreaseQty = useCartStore((state) => state.decreaseQty);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const displayedQuantity = isHydrated ? quantity : 0;
 
   const hasDiscount = product.discountPercentage > 0;
   const salePrice = hasDiscount
@@ -128,16 +139,35 @@ export default function ProductDetails({ product }: { product: Product }) {
           <div className="mb-4 flex items-center rounded-xl border border-secondary-bg bg-secondary-bg/60">
             <button
               type="button"
-              className="flex h-12 w-12 items-center justify-center text-secondary-tx duration-200 hover:text-primary-tx active:scale-95"
-              aria-label="Decrease quantity"
+              onClick={() => {
+                if (displayedQuantity === 1) {
+                  removeFromCart(product.id);
+                } else if (displayedQuantity > 1) {
+                  decreaseQty(product.id);
+                }
+              }}
+              disabled={displayedQuantity === 0}
+              className="flex h-12 w-12 items-center justify-center text-secondary-tx duration-200 hover:text-primary-tx active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label={
+                displayedQuantity === 1
+                  ? `Remove ${product.title} from cart`
+                  : `Decrease ${product.title} quantity`
+              }
             >
               <Minus className="h-4 w-4" strokeWidth={2} />
             </button>
             <span className="flex-1 text-center text-base font-semibold text-primary-tx">
-              0
+              {displayedQuantity}
             </span>
             <button
               type="button"
+              onClick={() => {
+                if (displayedQuantity === 0) {
+                  addToCart(product);
+                } else {
+                  increaseQty(product.id);
+                }
+              }}
               className="flex h-12 w-12 items-center justify-center text-secondary-tx duration-200 hover:text-primary-tx active:scale-95"
               aria-label="Increase quantity"
             >
@@ -147,9 +177,11 @@ export default function ProductDetails({ product }: { product: Product }) {
 
           <button
             type="button"
-            className="w-full rounded-xl bg-inverse py-4 text-sm font-bold tracking-[0.15em] text-primary-bg duration-300 hover:bg-inverse/85 active:scale-[0.98]"
+            onClick={() => addToCart(product)}
+            disabled={displayedQuantity > 0}
+            className="w-full rounded-xl py-4 text-sm font-bold tracking-[0.15em] duration-300 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-muted disabled:text-primary-bg disabled:active:scale-100 bg-inverse text-primary-bg hover:bg-inverse/85"
           >
-            ADD TO CART
+            {displayedQuantity > 0 ? "ADDED" : "ADD TO CART"}
           </button>
         </div>
       </div>
