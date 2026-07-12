@@ -31,7 +31,7 @@ This is a learning-by-building project — features like authentication are impl
 - [x] Category listing pages (statically generated)
 - [x] Product detail pages (statically generated)
 - [x] Global loading, error, and not-found handling, plus route-level skeleton loaders
-- [ ] Cart (Zustand, persisted client-side)
+- [x] Cart (Zustand, persisted client-side)
 - [ ] Authentication (Supabase Auth)
 - [ ] Checkout flow
 - [ ] Simulated payment
