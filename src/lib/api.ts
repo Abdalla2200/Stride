@@ -23,6 +23,35 @@ export async function getProductsByCategory(
   return res.json();
 }
 
+const TOP_RATED_CATEGORY_IDS = [
+  "mens-shirts",
+  "mens-shoes",
+  "mens-watches",
+  "sunglasses",
+] as const;
+
+function getHighestRatedProduct(products: Product[]): Product | null {
+  if (products.length === 0) {
+    return null;
+  }
+
+  return products.reduce((best, product) =>
+    product.rating > best.rating ? product : best,
+  );
+}
+
+/** One highest-rated product per category, in shirts → shoes → watches → sunglasses order. */
+export async function getTopRatedProductsByCategory(): Promise<Product[]> {
+  const results = await Promise.all(
+    TOP_RATED_CATEGORY_IDS.map(async (category) => {
+      const { products } = await getProductsByCategory(category);
+      return getHighestRatedProduct(products);
+    }),
+  );
+
+  return results.filter((product): product is Product => product !== null);
+}
+
 /**
  * Get a single product by id. Returns null if it doesn't exist,
  * so the caller can decide what to do (e.g. call notFound()).

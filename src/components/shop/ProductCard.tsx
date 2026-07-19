@@ -5,12 +5,17 @@ import { formatPrice } from "@/utils/utils";
 import StarRating from "./StartRating";
 import AddToCartBtn from "../cart/AddToCartBtn";
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({
+  product,
+  hideAddToCart = false,
+}: {
+  product: Product;
+  hideAddToCart?: boolean;
+}) {
   const hasDiscount = product.discountPercentage > 0;
   const salePrice = hasDiscount
     ? product.price * (1 - product.discountPercentage / 100)
     : product.price;
-  const reviewCount = product.reviews?.length ?? 0;
   const label = product.brand?.toUpperCase() ?? "STRIDE";
 
   return (
@@ -39,11 +44,8 @@ export default function ProductCard({ product }: { product: Product }) {
           </h3>
         </Link>
 
-        <div className="mb-3 flex items-center gap-2">
+        <div className="mb-3">
           <StarRating rating={product.rating} />
-          {reviewCount > 0 && (
-            <span className="text-xs text-muted">({reviewCount})</span>
-          )}
         </div>
 
         <div className="mb-4 flex items-baseline gap-2">
@@ -56,7 +58,7 @@ export default function ProductCard({ product }: { product: Product }) {
             </span>
           )}
         </div>
-        <AddToCartBtn product={product} />
+        {!hideAddToCart && <AddToCartBtn product={product} />}
       </div>
     </article>
   );
