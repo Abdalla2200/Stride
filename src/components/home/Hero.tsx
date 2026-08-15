@@ -1,11 +1,11 @@
 import Image from "next/image";
 import landingImg from "../../assets/landing-image.png";
-import Link from "next/link";
 
 export default function Hero() {
   return (
     <section className="relative h-[90dvh]">
       <Image
+        loading="eager"
         src={landingImg}
         alt="Hero image : a man wearing suit"
         className="w-full h-full object-cover"
@@ -15,11 +15,11 @@ export default function Hero() {
         <span className="text-primary-bg bg-accent/60 text-xs py-1 px-3 rounded-sm">
           NEW SEASON
         </span>
-        <h1 className="font-bold text-4xl md:text-[64px] text-primary-bg leading-[50px] md:leading-[70px] mb-4 mt-3">
+        <h1 className="font-bold text-4xl md:text-[64px] text-primary-bg leading-[50px] md:leading-17.5 mb-4 mt-3">
           DETAILS MAKE <br />
           THE MAN.
         </h1>
-        <p className="text-primary-bg/90 leading-[24px] max-w-[440px] mb-10">
+        <p className="text-primary-bg/90 leading-6 max-w-110 mb-10">
           Curated shirts, shoes, watches, and eyewear for men who don&apos;t
           settle for anything less than perfection.
         </p>

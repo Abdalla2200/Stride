@@ -15,7 +15,7 @@ This is a learning-by-building project — features like authentication are impl
 ## Tech Stack
 
 | Layer            | Choice                                 |
-| :--------------- | :------------------------------------- |
+| :--------------- | :-------------------------------------- |
 | Framework        | Next.js (App Router) + TypeScript      |
 | Styling          | Tailwind CSS                           |
 | State management | Zustand                                |
@@ -31,8 +31,8 @@ This is a learning-by-building project — features like authentication are impl
 - [x] Category listing pages (statically generated)
 - [x] Product detail pages (statically generated)
 - [x] Global loading, error, and not-found handling, plus route-level skeleton loaders
-- [x] Cart (Zustand, persisted client-side)
-- [ ] Authentication (Supabase Auth)
+- [x] Cart (Zustand, scoped to the authenticated user)
+- [x] Authentication (Supabase Auth: sign up, sign in, sessions, Google OAuth)
 - [ ] Checkout flow
 - [ ] Simulated payment
 - [ ] Order history
@@ -48,11 +48,20 @@ npm run dev
 
 Then open [http://localhost:3000](http://localhost:3000).
 
-> Environment variables (Supabase keys) will be documented here once auth is wired up.
+## Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+(Add any additional keys your Supabase client setup requires, e.g. Google OAuth redirect config.)
 
 ## Notes on Data & Rendering
 
-Product data comes from the public [DummyJSON](https://dummyjson.com) API across four categories: `mens-shirts`, `mens-shoes`, `mens-watches`, and `sunglasses`. Since this catalog is fixed and outside my control, category and product detail pages are statically generated at build time (`generateStaticParams` + `cache: 'force-cache'`) instead of fetched per request. Cart, checkout, and payment actions are simulated for demonstration purposes — nothing writes back to a real backend or processes real payments.
+Product data comes from the public [DummyJSON](https://dummyjson.com) API across four categories: `mens-shirts`, `mens-shoes`, `mens-watches`, and `sunglasses`. Since this catalog is fixed and outside my control, category and product detail pages are statically generated at build time (`generateStaticParams` + `cache: 'force-cache'`) instead of fetched per request. Product images and data are placeholder-quality from a free public API — the focus here is the storefront logic and UX, not the catalog itself, since the real use case is selling this storefront as a template for others to plug in their own products. Checkout and payment actions are simulated for demonstration purposes — nothing processes real payments.
 
 ## Design
 
@@ -60,4 +69,4 @@ UI designed in Google Stitch, covering Home, Category Listing, Product Detail, C
 
 ---
 
-_This README is updated as each part of the project is completed._
+*This README is updated as each part of the project is completed.*

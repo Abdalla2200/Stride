@@ -3,6 +3,8 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { ToastProvider } from "@/components/UI/ToastProvider";
+import CartAuthSync from "@/components/cart/CartAuthSync";
 
 export const metadata: Metadata = {
   title: "Stride | Home",
@@ -21,14 +23,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="">
-      <head></head>
+    <html lang="en" data-scroll-behavior="smooth">
+      <head>
+        
+      </head>
       <body
         className={`${inter.variable} bg-primary-bg text-primary-tx flex flex-col min-h-dvh`}
       >
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <ToastProvider>
+          <Header />
+          <CartAuthSync />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </ToastProvider>
       </body>
     </html>
   );
