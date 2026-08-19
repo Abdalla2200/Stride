@@ -28,3 +28,15 @@ export interface ProductsResponse {
   skip: number;
   limit: number;
 }
+
+/**
+ * A cart item is a subset of Product fields the cart actually needs,
+ * plus a quantity. Defined here (not in cartStore) to avoid circular
+ * imports between lib/api → cartStore → lib/api.
+ */
+export type CartItem = Pick<
+  Product,
+  "id" | "title" | "price" | "description" | "images" | "discountPercentage" | "brand"
+> & {
+  quantity: number;
+};

@@ -2,8 +2,8 @@
 
 import { z } from "zod";
 import { createClient } from "../lib/supabase/server";
-import { getProductById } from "@/lib/api";
-import type { CartItem } from "../store/cartStore";
+import { mapRowsToCartItems } from "@/lib/api";
+import type { CartItem } from "@/types";
 
 const cartItemSchema = z.object({
   productId: z.number().int().positive(),
@@ -86,24 +86,8 @@ export async function fetchCartItems(): Promise<CartItem[]> {
 
   if (!rows) return [];
 
-  const items = await Promise.all(
-    rows.map(async (row): Promise<CartItem | null> => {
-      const product = await getProductById(row.product_id);
-      if (!product) return null;
-
-      return {
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        description: product.description,
-        images: product.images,
-        discountPercentage: product.discountPercentage,
-        quantity: row.quantity,
-      };
-    }),
-  );
-
-  return items.filter((item): item is CartItem => item !== null);
+  // Shared mapper — same logic as the browser-client path in CartAuthSync.
+  return mapRowsToCartItems(rows);
 }
 
 export async function mergeGuestCart(

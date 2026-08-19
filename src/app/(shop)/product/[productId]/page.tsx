@@ -1,15 +1,18 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import ProductDetails from "@/components/shop/ProductDetails";
-import { getProductById, getProductsByCategory } from "@/lib/api";
+import { getProductById, getProductIdsByCategory } from "@/lib/api";
 import { categoryIds } from "@/constants/categories";
 
+/**
+ * Only fetch product IDs at build time — avoids downloading full product
+ * payloads (images, descriptions, reviews, etc.) just to get the id list.
+ */
 export async function generateStaticParams() {
-  const results = await Promise.all(
-    categoryIds.map((c) => getProductsByCategory(c)),
+  const allIds = await Promise.all(
+    categoryIds.map((c) => getProductIdsByCategory(c)),
   );
-  const ids = results.flatMap((r) => r.products.map((p) => p.id));
-  return ids.map((id) => ({ productId: String(id) }));
+  return allIds.flat().map((id) => ({ productId: String(id) }));
 }
 
 export async function generateMetadata({

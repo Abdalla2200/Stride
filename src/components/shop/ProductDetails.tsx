@@ -7,9 +7,8 @@ import { ChevronRight, Minus, Plus } from "lucide-react";
 import { Product } from "@/types";
 import { getCategoryMeta } from "@/constants/categories";
 import { useCartStore } from "@/store/cartStore";
-import { formatPrice } from "@/utils/utils";
-import { useHydrated } from "@/utils/useHydrated";
-import StarRating from "./StartRating";
+import { formatPrice, getSalePrice } from "@/utils/utils";
+import StarRating from "@/components/shop/StarRating";
 import { Button } from "@/components/UI/button";
 
 type Tab = "description" | "specifications" | "reviews";
@@ -19,7 +18,10 @@ export default function ProductDetails({ product }: { product: Product }) {
     product.images.length > 0 ? product.images : [product.thumbnail];
   const [activeImage, setActiveImage] = useState(0);
   const [activeTab, setActiveTab] = useState<Tab>("description");
-  const isHydrated = useHydrated();
+
+  // With skipHydration: true the store starts empty on both server and client,
+  // so quantity is reliably 0 until CartAuthSync populates it — no hydration
+  // mismatch, no useHydrated wrapper needed.
   const quantity = useCartStore(
     (state) =>
       state.items.find((item) => item.id === product.id)?.quantity ?? 0,
@@ -28,12 +30,9 @@ export default function ProductDetails({ product }: { product: Product }) {
   const increaseQty = useCartStore((state) => state.increaseQty);
   const decreaseQty = useCartStore((state) => state.decreaseQty);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const displayedQuantity = isHydrated ? quantity : 0;
 
+  const salePrice = getSalePrice(product.price, product.discountPercentage);
   const hasDiscount = product.discountPercentage > 0;
-  const salePrice = hasDiscount
-    ? product.price * (1 - product.discountPercentage / 100)
-    : product.price;
   const reviewCount = product.reviews?.length ?? 0;
   const categoryMeta = getCategoryMeta(product.category);
   const categoryLabel = categoryMeta?.breadcrumb ?? product.category;
@@ -142,16 +141,16 @@ export default function ProductDetails({ product }: { product: Product }) {
             <button
               type="button"
               onClick={() => {
-                if (displayedQuantity === 1) {
+                if (quantity === 1) {
                   removeFromCart(product.id);
-                } else if (displayedQuantity > 1) {
+                } else if (quantity > 1) {
                   decreaseQty(product.id);
                 }
               }}
-              disabled={displayedQuantity === 0}
+              disabled={quantity === 0}
               className="flex h-12 w-12 items-center justify-center text-secondary-tx duration-200 hover:text-primary-tx active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
               aria-label={
-                displayedQuantity === 1
+                quantity === 1
                   ? `Remove ${product.title} from cart`
                   : `Decrease ${product.title} quantity`
               }
@@ -159,12 +158,12 @@ export default function ProductDetails({ product }: { product: Product }) {
               <Minus className="h-4 w-4" strokeWidth={2} />
             </button>
             <span className="flex-1 text-center text-base font-semibold text-primary-tx">
-              {displayedQuantity}
+              {quantity}
             </span>
             <button
               type="button"
               onClick={() => {
-                if (displayedQuantity === 0) {
+                if (quantity === 0) {
                   addToCart(product);
                 } else {
                   increaseQty(product.id);
@@ -180,10 +179,10 @@ export default function ProductDetails({ product }: { product: Product }) {
           <Button
             type="button"
             onClick={() => addToCart(product)}
-            disabled={displayedQuantity > 0}
+            disabled={quantity > 0}
             className="w-full rounded-xl py-4 h-auto text-sm font-bold tracking-[0.15em] duration-300 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-dim disabled:text-primary-bg disabled:active:scale-100 bg-inverse text-primary-bg hover:bg-inverse/85"
           >
-            {displayedQuantity > 0 ? "ADDED" : "ADD TO CART"}
+            {quantity > 0 ? "ADDED" : "ADD TO CART"}
           </Button>
         </div>
       </div>

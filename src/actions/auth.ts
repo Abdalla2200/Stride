@@ -71,15 +71,3 @@ export async function loginUserAction(
   revalidatePath("/", "layout");
   return { status: "success" };
 }
-
-export async function logoutUserAction() {
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signOut();
-
-  if (error) {
-    return { status: "error", message: error.message };
-  }
-
-  revalidatePath("/", "layout");
-  return { status: "success" };
-}

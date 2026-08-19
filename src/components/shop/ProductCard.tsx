@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
-import { formatPrice } from "@/utils/utils";
-import StarRating from "@/components/shop/StartRating";
+import { formatPrice, getSalePrice } from "@/utils/utils";
+import StarRating from "@/components/shop/StarRating";
 import AddToCartBtn from "@/components/cart/AddToCartBtn";
 
 export default function ProductCard({
@@ -12,10 +12,8 @@ export default function ProductCard({
   product: Product;
   hideAddToCart?: boolean;
 }) {
+  const salePrice = getSalePrice(product.price, product.discountPercentage);
   const hasDiscount = product.discountPercentage > 0;
-  const salePrice = hasDiscount
-    ? product.price * (1 - product.discountPercentage / 100)
-    : product.price;
   const label = product.brand?.toUpperCase() ?? "STRIDE";
 
   return (
@@ -39,7 +37,7 @@ export default function ProductCard({
         </p>
 
         <Link href={`/product/${product.id}`}>
-          <h3 className="mb-2 text-sm font-semibold leading-snug text-primary-tx duration-200 hover:text-accent sm:text-base">
+          <h3 className="mb-2 text-sm font-semibold leading-snug text-primary-tx duration-200 hover:text-primary-tx/80 sm:text-base">
             {product.title}
           </h3>
         </Link>

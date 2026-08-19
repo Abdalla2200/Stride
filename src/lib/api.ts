@@ -1,4 +1,5 @@
 import { Product, ProductsResponse } from "@/types";
+import type { CartItem } from "@/types";
 
 const BASE_URL = "https://dummyjson.com";
 
@@ -72,4 +73,52 @@ export async function getProductById(
   }
 
   return res.json();
+}
+
+/**
+ * Shared mapper: convert raw Supabase cart rows into enriched CartItem[].
+ * Used by both the browser-client path (CartAuthSync) and the server-action
+ * path (cartAction.ts) so the mapping logic lives in exactly one place.
+ */
+export async function mapRowsToCartItems(
+  rows: { product_id: number; quantity: number }[],
+): Promise<CartItem[]> {
+  const items = await Promise.all(
+    rows.map(async (row): Promise<CartItem | null> => {
+      try {
+        const product = await getProductById(row.product_id);
+        if (!product) return null;
+        return {
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          description: product.description,
+          images: product.images,
+          discountPercentage: product.discountPercentage,
+          brand: product.brand,
+          quantity: row.quantity,
+        };
+      } catch {
+        return null;
+      }
+    }),
+  );
+  return items.filter((item): item is CartItem => item !== null);
+}
+
+/**
+ * Lightweight category fetch that only retrieves product IDs.
+ * Used at build time in generateStaticParams to avoid downloading
+ * full product payloads just to get the id list.
+ */
+export async function getProductIdsByCategory(
+  category: string,
+): Promise<number[]> {
+  const res = await fetch(
+    `${BASE_URL}/products/category/${category}?select=id`,
+    { cache: "force-cache" },
+  );
+  if (!res.ok) return [];
+  const data: { products: { id: number }[] } = await res.json();
+  return data.products.map((p) => p.id);
 }

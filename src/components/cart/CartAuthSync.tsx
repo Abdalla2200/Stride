@@ -5,25 +5,29 @@ import { useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useCartStore, type CartItem } from "@/store/cartStore";
 import { mergeGuestCart } from "@/actions/cartAction";
+import { mapRowsToCartItems } from "@/lib/api";
 
 /** Events that are noisy re-broadcasts of an unchanged session — safe to skip. */
-const SKIP_EVENTS = new Set(["TOKEN_REFRESHED", "USER_UPDATED", "MFA_CHALLENGE_VERIFIED"]);
+const SKIP_EVENTS = new Set([
+  "TOKEN_REFRESHED",
+  "USER_UPDATED",
+  "MFA_CHALLENGE_VERIFIED",
+]);
 
 /**
  * Fetch cart rows using the BROWSER Supabase client (session is already in
- * memory — no cookie round-trip needed), then enrich with product data from
- * the public DummyJSON API.  This avoids the server-action cookie-race that
- * caused an empty cart right after sign-in.
+ * memory — no cookie round-trip needed), then enrich with product data via
+ * the shared mapRowsToCartItems helper. This avoids the server-action
+ * cookie-race that caused an empty cart right after sign-in.
  */
 async function fetchCartItemsClient(userId: string): Promise<CartItem[]> {
   const supabase = createClient();
 
-  // Check if we have an active session
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-  if (sessionError || !session) {
-    // No active session, return empty cart
-    return [];
-  }
+  const {
+    data: { session },
+    error: sessionError,
+  } = await supabase.auth.getSession();
+  if (sessionError || !session) return [];
 
   const { data: rows, error } = await supabase
     .from("cart_items")
@@ -32,28 +36,8 @@ async function fetchCartItemsClient(userId: string): Promise<CartItem[]> {
 
   if (error || !rows || rows.length === 0) return [];
 
-  const items = await Promise.all(
-    rows.map(async (row): Promise<CartItem | null> => {
-      try {
-        const res = await fetch(`https://dummyjson.com/products/${row.product_id}`);
-        if (!res.ok) return null;
-        const product = await res.json();
-        return {
-          id: product.id,
-          title: product.title,
-          price: product.price,
-          description: product.description,
-          images: product.images,
-          discountPercentage: product.discountPercentage,
-          quantity: row.quantity,
-        };
-      } catch {
-        return null;
-      }
-    }),
-  );
-
-  return items.filter((item): item is CartItem => item !== null);
+  // Shared mapper — same logic as the server-action path in cartAction.ts.
+  return mapRowsToCartItems(rows);
 }
 
 export default function CartAuthSync() {
@@ -157,4 +141,3 @@ export default function CartAuthSync() {
 
   return null;
 }
-
