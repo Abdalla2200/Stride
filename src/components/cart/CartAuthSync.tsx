@@ -79,10 +79,15 @@ export default function CartAuthSync() {
           previousUserId.current = currentUserId;
 
           if (currentUserId) {
-            // Mark as NOT synced while we fetch so the cart shows a skeleton.
+            // Logged-in user: fetch authoritative data from the server.
+            // Do NOT rehydrate from localStorage — that stale data would
+            // overwrite the correct server quantity (the doubling bug).
             setSynced(false);
             const items = await fetchCartItemsClient(currentUserId);
             setItems(items);
+          } else {
+            // Guest user: restore cart from localStorage.
+            await useCartStore.persist.rehydrate();
           }
           // Whether we fetched or not, we're now synced.
           setSynced(true);
@@ -99,21 +104,30 @@ export default function CartAuthSync() {
         // ── SIGNED_IN ────────────────────────────────────────────────────────
         // The browser client already has the session in memory, so we can query
         // Supabase directly without waiting for any cookie.
+        //
+        // NOTE: Supabase also fires SIGNED_IN on tab re-focus / token refresh,
+        // even when the user was already logged in. Guard against that by only
+        // merging guest items when previousUserId was null (genuine new login).
         if (event === "SIGNED_IN" && currentUserId) {
+          const isGenuineSignIn = previousUserId.current === null;
           previousUserId.current = currentUserId;
 
           // Mark as NOT synced — cart page should show skeleton, not empty state.
           setSynced(false);
 
-          // Merge any guest items added while logged out.
-          const guestItems = useCartStore.getState().items;
-          if (guestItems.length > 0) {
-            await mergeGuestCart(
-              guestItems.map((item) => ({
-                productId: item.id,
-                quantity: item.quantity,
-              })),
-            );
+          // Only merge guest items on a real sign-in (not a tab re-focus).
+          // Merging on re-focus would add the already-synced store items on top
+          // of the existing DB quantity, causing the quantity-doubling bug.
+          if (isGenuineSignIn) {
+            const guestItems = useCartStore.getState().items;
+            if (guestItems.length > 0) {
+              await mergeGuestCart(
+                guestItems.map((item) => ({
+                  productId: item.id,
+                  quantity: item.quantity,
+                })),
+              );
+            }
           }
 
           // Fetch directly via browser client — no cookie race.

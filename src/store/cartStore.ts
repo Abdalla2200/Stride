@@ -132,6 +132,11 @@ export const useCartStore = create<CartStore>()(
       // `synced` is runtime-only — never persist it. It always starts as false
       // so CartAuthSync must complete a fetch before the cart page renders.
       partialize: (state) => ({ items: state.items }),
+      // Skip automatic rehydration on mount. CartAuthSync calls
+      // useCartStore.persist.rehydrate() manually for guests only, so that
+      // a logged-in user's server data is never overwritten by stale
+      // localStorage values (which was causing the quantity-doubling bug).
+      skipHydration: true,
     },
   ),
 );
