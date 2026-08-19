@@ -1,7 +1,7 @@
-import shirtsImg from "../../assets/shirts.png";
-import shoesImg from "../../assets/shoes.png";
-import watchesImg from "../../assets/watches.png";
-import sunglassesImg from "../../assets/sunglasses.png";
+import shirtsImg from "@/assets/shirts.png";
+import shoesImg from "@/assets/shoes.png";
+import watchesImg from "@/assets/watches.png";
+import sunglassesImg from "@/assets/sunglasses.png";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -18,9 +18,9 @@ export default function LandingCategories() {
       id="categories"
       className="container py-sectionPadding-mob md:py-sectionPadding my-sectionMargine-mob md:my-sectionMargine"
     >
-      <h1 className="text-primary-tx font-bold text-3xl text-center sm:text-start sm:text-4xl md:text-5xl mb-12">
+      <h2 className="text-primary-tx font-bold text-3xl text-center sm:text-start sm:text-4xl md:text-5xl mb-12">
         Shop by Category
-      </h1>
+      </h2>
       <div className="grid items-center w-[75%] sm:w-full mx-auto gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {categoriyList.map((category) => (
           <Link

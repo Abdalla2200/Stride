@@ -44,7 +44,7 @@ export default async function CategoryPage({
 
   return (
     <section className="container py-sectionPadding-mob md:py-sectionPadding">
-      <nav className="mb-6 flex items-center gap-1.5 text-sm text-muted">
+      <nav className="mb-6 flex items-center gap-1.5 text-sm text-dim">
         <Link href="/" className="duration-200 hover:text-primary-tx">
           Home
         </Link>
@@ -61,7 +61,7 @@ export default async function CategoryPage({
             {category.description}
           </p>
         </div>
-        <p className="shrink-0 text-xs font-semibold tracking-widest text-muted">
+        <p className="shrink-0 text-xs font-semibold tracking-widest text-dim">
           {total} PRODUCTS
         </p>
       </div>

@@ -2,6 +2,7 @@
 import { useCartStore } from "@/store/cartStore";
 import { Product } from "@/types";
 import { useState } from "react";
+import { Button } from "@/components/UI/button";
 
 export default function AddToCartBtn({ product }: { product: Product }) {
   const addToCart = useCartStore((state) => state.addToCart);
@@ -15,17 +16,19 @@ export default function AddToCartBtn({ product }: { product: Product }) {
 
   const handleAddToCartBtn = () => {
     addBtnDelay();
-
     addToCart(product);
   };
 
   return (
-    <button
+    <Button
       onClick={handleAddToCartBtn}
       type="button"
-      className={`mt-auto w-full rounded-lg bg-inverse py-2.5 text-sm font-semibold text-primary-bg duration-300 hover:bg-inverse/90 active:scale-[0.98] ${isAddBtnClicked && "bg-gray-600! cursor-not-allowed"}`}
+      disabled={isAddBtnClicked}
+      className={`mt-auto w-full rounded-lg bg-inverse py-2.5 h-auto text-sm font-semibold text-primary-bg duration-300 hover:bg-inverse/90 active:scale-[0.98] ${
+        isAddBtnClicked && "bg-gray-600! cursor-not-allowed"
+      }`}
     >
       {isAddBtnClicked ? "Adding ..." : "Add to cart"}
-    </button>
+    </Button>
   );
 }

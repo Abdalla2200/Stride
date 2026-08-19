@@ -4,17 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import loginImage from "@/assets/login-image.png";
-import { loginUserAction } from "@/actions/auth";
+import { createClient } from "@/lib/supabase/client";
 import { useForm } from "react-hook-form";
 import { LoginFormData, loginSchema } from "@/utils/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import GoogleAuthButton from "@/components/auth/GoogleAuthButton";
-import { useToast } from "@/components/UI/ToastProvider";
+import { Button } from "@/components/UI/button";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { showToast } = useToast();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
@@ -28,13 +28,18 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      const result = await loginUserAction(values);
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+      });
 
-      if (result?.status === "error") {
-        setServerError(result.message);
-      } else if (result?.status === "success") {
-        showToast("You're now signed in");
+      if (error) {
+        setServerError(error.message);
+      } else {
+        toast.success("You're now signed in");
         router.push("/cart");
+        router.refresh();
       }
     } finally {
       setIsSubmitting(false);
@@ -87,7 +92,7 @@ export default function LoginPage() {
                   {...register("email")}
                   type="email"
                   placeholder="your@email.com"
-                  // value="testingEmail@abc.com"
+                  defaultValue="testingEmail@abc.com"
                   autoComplete="email"
                   className="mt-1.5 w-full rounded-md border border-stone-200 bg-white px-3 py-3 text-sm text-stone-900 outline-none transition focus:border-stone-700 focus:ring-2 focus:ring-stone-300 placeholder:text-stone-400"
                 />
@@ -105,7 +110,7 @@ export default function LoginPage() {
                   {...register("password")}
                   type="password"
                   placeholder="••••••••"
-                  // value="12345678"
+                  defaultValue="12345678"
                   autoComplete="current-password"
                   className="mt-1.5 w-full rounded-md border border-stone-200 bg-white px-3 py-3 text-sm text-stone-900 outline-none transition focus:border-stone-700 focus:ring-2 focus:ring-stone-300 placeholder:text-stone-400"
                 />
@@ -116,13 +121,13 @@ export default function LoginPage() {
                 </p>
               )}
             </div>
-            <button
+            <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-md bg-stone-950 py-3.5 text-[10px] font-bold tracking-[0.16em] text-white transition hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-md bg-stone-950 py-3.5 h-auto text-[10px] font-bold tracking-[0.16em] text-white hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? "SIGNING IN..." : "SIGN IN"}
-            </button>
+            </Button>
           </form>
           <div className="my-6 flex items-center gap-3 text-[10px] text-stone-400">
             <span className="h-px flex-1 bg-stone-200" />

@@ -5,10 +5,9 @@ import Link from "next/link";
 import { Minus, Plus, ShoppingBag, X } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice } from "@/utils/utils";
-import { useHydrated } from "@/utils/useHydrated";
 
 export default function CartPage() {
-  const isHydrated = useHydrated();
+  const synced = useCartStore((state) => state.synced);
   const items = useCartStore((state) => state.items);
   const increaseQty = useCartStore((state) => state.increaseQty);
   const decreaseQty = useCartStore((state) => state.decreaseQty);
@@ -24,7 +23,7 @@ export default function CartPage() {
   }, 0);
   const total = subtotal - discount;
 
-  if (!isHydrated) {
+  if (!synced) {
     return (
       <section
         className="container animate-pulse py-sectionPadding-mob md:py-sectionPadding"
@@ -109,7 +108,7 @@ export default function CartPage() {
                   >
                     {item.title}
                   </Link>
-                  <p className="mt-1 line-clamp-1 text-xs text-muted">
+                  <p className="mt-1 line-clamp-1 text-xs text-dim">
                     {item.description}
                   </p>
 
@@ -145,7 +144,7 @@ export default function CartPage() {
                     </div>
                     <div className="text-right">
                       {hasDiscount && (
-                        <p className="text-xs text-muted line-through">
+                        <p className="text-xs text-dim line-through">
                           {formatPrice(lineSubtotal)}
                         </p>
                       )}
@@ -160,7 +159,7 @@ export default function CartPage() {
                   type="button"
                   onClick={() => removeFromCart(item.id)}
                   aria-label={`Remove ${item.title} from cart`}
-                  className="absolute top-0 right-0 p-1 text-muted transition-colors hover:text-primary-tx"
+                  className="absolute top-0 right-0 p-1 text-dim transition-colors hover:text-primary-tx"
                 >
                   <X className="h-4 w-4" strokeWidth={1.8} />
                 </button>

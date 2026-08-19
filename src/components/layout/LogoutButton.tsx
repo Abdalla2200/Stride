@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { LogOut, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { logoutUserAction } from "@/actions/auth";
-import { useCartStore } from "@/store/cartStore"; // add this
+import { createClient } from "@/lib/supabase/client";
+import { useCartStore } from "@/store/cartStore";
+import { Button } from "@/components/UI/button";
 
-export default function LogoutButton({ className }: { className: string }) {
+export default function LogoutButton({ className }: { className?: string }) {
   const router = useRouter();
-  const clearCart = useCartStore((state) => state.clearCart); // add this
+  const clearCart = useCartStore((state) => state.clearCart);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -18,28 +19,30 @@ export default function LogoutButton({ className }: { className: string }) {
     setIsLoggingOut(true);
 
     try {
-      const result = await logoutUserAction();
+      const supabase = createClient();
+      const { error: signOutError } = await supabase.auth.signOut();
 
-      if (result.status === "success") {
-        clearCart(); // add this — clear before navigating away
+      if (!signOutError) {
+        clearCart();
         router.push("/login");
         router.refresh();
       } else {
-        setError(result.message ?? "Unable to log out. Please try again.");
+        setError(signOutError.message ?? "Unable to log out. Please try again.");
       }
     } finally {
       setIsLoggingOut(false);
     }
   };
+
   return (
     <>
-      <button
+      <Button
         type="button"
         onClick={() => setIsConfirmOpen(true)}
         className={className}
       >
         LOG OUT
-      </button>
+      </Button>
 
       {isConfirmOpen && (
         <div
@@ -53,14 +56,16 @@ export default function LogoutButton({ className }: { className: string }) {
               <div className="flex h-11 w-11 items-center justify-center rounded-full bg-accent/20 text-primary-tx">
                 <LogOut className="h-5 w-5" aria-hidden="true" />
               </div>
-              <button
+              <Button
                 type="button"
                 onClick={() => setIsConfirmOpen(false)}
                 aria-label="Close logout confirmation"
-                className="rounded-md p-1 text-muted transition-colors hover:bg-secondary-bg hover:text-primary-tx"
+                variant="ghost"
+                size="icon"
+                className="text-dim hover:bg-secondary-bg hover:text-primary-tx"
               >
                 <X className="h-5 w-5" aria-hidden="true" />
-              </button>
+              </Button>
             </div>
 
             <h2
@@ -75,22 +80,23 @@ export default function LogoutButton({ className }: { className: string }) {
             {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
 
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <button
+              <Button
                 type="button"
                 onClick={() => setIsConfirmOpen(false)}
                 disabled={isLoggingOut}
-                className="rounded-lg border border-secondary-bg px-4 py-3 text-xs font-bold tracking-wide text-primary-tx transition-colors hover:bg-secondary-bg disabled:cursor-not-allowed"
+                variant="outline"
+                className="rounded-lg px-4 py-3 h-auto text-xs font-bold tracking-wide text-primary-tx border-secondary-bg hover:bg-secondary-bg disabled:cursor-not-allowed"
               >
                 CANCEL
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 onClick={handleLogout}
                 disabled={isLoggingOut}
-                className="rounded-lg bg-inverse px-4 py-3 text-xs font-bold tracking-wide text-primary-bg transition-colors hover:bg-inverse/85 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-lg bg-inverse px-4 py-3 h-auto text-xs font-bold tracking-wide text-primary-bg hover:bg-inverse/85 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isLoggingOut ? "LOGGING OUT..." : "LOG OUT"}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

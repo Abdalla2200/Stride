@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/UI/button";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -57,11 +58,13 @@ export default function JoinTheList() {
               disabled={status === "loading"}
               className="bg-primary-bg/5 text-primary-bg/80 text-lg rounded-md p-4 flex-1 outline-none min-w-[300px] sm:min-w-[450px] disabled:opacity-60"
             />
-            <button
+            <Button
               type="submit"
               disabled={status === "loading"}
-              className={`flex items-center justify-center gap-2 text-primary-bg rounded-md py-3 px-6 w-full sm:w-[127px] ${
-                status === "loading" ? "bg-gray-500" : "bg-accent/60"
+              className={`flex items-center justify-center gap-2 rounded-md py-3 px-6 w-full sm:w-auto h-auto ${
+                status === "loading"
+                  ? "bg-gray-500 text-white"
+                  : "bg-accent/60 text-primary-bg hover:bg-accent/80"
               }`}
             >
               {status === "loading" ? (
@@ -69,7 +72,7 @@ export default function JoinTheList() {
               ) : (
                 "SUBSCRIBE"
               )}
-            </button>
+            </Button>
           </form>
 
           <p

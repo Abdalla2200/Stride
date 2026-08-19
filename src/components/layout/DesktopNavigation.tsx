@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { usePathname } from "next/navigation";
-import CartIcon from "../cart/CartIcon";
-import { navigationLinks } from "./navigationLinks";
-import LogoutButton from "./LogoutButton";
+import CartIcon from "@/components/cart/CartIcon";
+import { navigationLinks } from "@/components/layout/navigationLinks";
+import LogoutButton from "@/components/layout/LogoutButton";
+import { Button } from "@/components/UI/button";
 
 export default function DesktopNavigation({
   isLoggedIn,
@@ -42,14 +43,14 @@ export default function DesktopNavigation({
         <Search className="cursor-pointer duration-300 hover:scale-[1.150]" />
         <CartIcon />
         {isLoggedIn ? (
-          <LogoutButton className="rounded-lg bg-primary-bg px-2 py-1 text-xs font-semibold text-primary-tx duration-300 hover:bg-primary-bg/80 lg:px-4 lg:py-2 lg:text-sm" />
+          <LogoutButton className="rounded-lg bg-primary-bg px-2 py-1 h-auto text-xs font-semibold text-primary-tx duration-300 hover:bg-primary-bg/80 lg:px-4 lg:py-2 lg:text-sm" />
         ) : (
-          <Link
-            href="/login"
-            className="rounded-lg bg-primary-bg px-2 py-1 text-xs font-semibold text-primary-tx duration-300 hover:bg-primary-bg/85 lg:px-4 lg:py-2 lg:text-sm"
+          <Button
+            asChild
+            className="rounded-lg bg-primary-bg px-2 py-1 h-auto text-xs font-semibold text-primary-tx duration-300 hover:bg-primary-bg/85 lg:px-4 lg:py-2 lg:text-sm"
           >
-            SIGN IN
-          </Link>
+            <Link href="/login">SIGN IN</Link>
+          </Button>
         )}
       </div>
     </>

@@ -1,8 +1,8 @@
 import Link from "next/link";
-import headerLogoImg from "../../assets/headerLogo.png";
+import headerLogoImg from "@/assets/headerLogo.png";
 import Image from "next/image";
-import DesktopNavigation from "./DesktopNavigation";
-import MobileNavigation from "./MobileNavigation";
+import DesktopNavigation from "@/components/layout/DesktopNavigation";
+import MobileNavigation from "@/components/layout/MobileNavigation";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function Header() {

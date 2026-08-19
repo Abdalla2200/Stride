@@ -10,6 +10,7 @@ import { useCartStore } from "@/store/cartStore";
 import { formatPrice } from "@/utils/utils";
 import { useHydrated } from "@/utils/useHydrated";
 import StarRating from "./StartRating";
+import { Button } from "@/components/UI/button";
 
 type Tab = "description" | "specifications" | "reviews";
 
@@ -20,7 +21,8 @@ export default function ProductDetails({ product }: { product: Product }) {
   const [activeTab, setActiveTab] = useState<Tab>("description");
   const isHydrated = useHydrated();
   const quantity = useCartStore(
-    (state) => state.items.find((item) => item.id === product.id)?.quantity ?? 0,
+    (state) =>
+      state.items.find((item) => item.id === product.id)?.quantity ?? 0,
   );
   const addToCart = useCartStore((state) => state.addToCart);
   const increaseQty = useCartStore((state) => state.increaseQty);
@@ -45,7 +47,7 @@ export default function ProductDetails({ product }: { product: Product }) {
 
   return (
     <section className="container py-sectionPadding-mob md:py-sectionPadding">
-      <nav className="mb-8 flex flex-wrap items-center gap-1.5 text-sm text-muted">
+      <nav className="mb-8 flex flex-wrap items-center gap-1.5 text-sm text-dim">
         <Link href="/" className="duration-200 hover:text-primary-tx">
           Home
         </Link>
@@ -71,7 +73,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                 className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 duration-200 sm:h-20 sm:w-20 ${
                   activeImage === index
                     ? "border-primary-tx"
-                    : "border-transparent opacity-70 hover:border-muted hover:opacity-100"
+                    : "border-transparent opacity-70 hover:border-dim hover:opacity-100"
                 }`}
               >
                 <Image
@@ -98,7 +100,7 @@ export default function ProductDetails({ product }: { product: Product }) {
         </div>
 
         <div className="flex flex-col">
-          <p className="mb-2 text-[11px] font-semibold tracking-[0.2em] text-muted">
+          <p className="mb-2 text-[11px] font-semibold tracking-[0.2em] text-dim">
             {(product.brand ?? "STRIDE").toUpperCase()}
           </p>
 
@@ -111,7 +113,7 @@ export default function ProductDetails({ product }: { product: Product }) {
             <span className="text-sm text-secondary-tx">
               {product.rating.toFixed(1)}
               {reviewCount > 0 && (
-                <span className="text-muted"> ({reviewCount} reviews)</span>
+                <span className="text-dim"> ({reviewCount} reviews)</span>
               )}
             </span>
           </div>
@@ -122,7 +124,7 @@ export default function ProductDetails({ product }: { product: Product }) {
             </span>
             {hasDiscount && (
               <>
-                <span className="text-lg text-muted line-through">
+                <span className="text-lg text-dim line-through">
                   {formatPrice(product.price)}
                 </span>
                 <span className="rounded-full bg-accent/25 px-3 py-1 text-xs font-bold tracking-wide text-primary-tx">
@@ -175,14 +177,14 @@ export default function ProductDetails({ product }: { product: Product }) {
             </button>
           </div>
 
-          <button
+          <Button
             type="button"
             onClick={() => addToCart(product)}
             disabled={displayedQuantity > 0}
-            className="w-full rounded-xl py-4 text-sm font-bold tracking-[0.15em] duration-300 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-muted disabled:text-primary-bg disabled:active:scale-100 bg-inverse text-primary-bg hover:bg-inverse/85"
+            className="w-full rounded-xl py-4 h-auto text-sm font-bold tracking-[0.15em] duration-300 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-dim disabled:text-primary-bg disabled:active:scale-100 bg-inverse text-primary-bg hover:bg-inverse/85"
           >
             {displayedQuantity > 0 ? "ADDED" : "ADD TO CART"}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -196,7 +198,7 @@ export default function ProductDetails({ product }: { product: Product }) {
               className={`shrink-0 pb-4 text-xs font-semibold tracking-[0.15em] duration-200 sm:text-sm ${
                 activeTab === tab.id
                   ? "border-b-2 border-primary-tx text-primary-tx"
-                  : "text-muted hover:text-secondary-tx"
+                  : "text-dim hover:text-secondary-tx"
               }`}
             >
               {tab.label}
@@ -204,7 +206,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           ))}
         </div>
 
-        <div className="relative h-[440px]  overflow-y-auto">
+        <div className="relative h-110  overflow-y-auto">
           {activeTab === "description" && (
             <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
               <div>
@@ -243,7 +245,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           {activeTab === "specifications" && (
             <dl className="grid max-w-2xl grid-cols-1 gap-x-10 gap-y-5 sm:grid-cols-2">
               <div>
-                <dt className="mb-1 text-xs font-semibold tracking-widest text-muted">
+                <dt className="mb-1 text-xs font-semibold tracking-widest text-dim">
                   BRAND
                 </dt>
                 <dd className="text-sm text-primary-tx">
@@ -251,7 +253,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                 </dd>
               </div>
               <div>
-                <dt className="mb-1 text-xs font-semibold tracking-widest text-muted">
+                <dt className="mb-1 text-xs font-semibold tracking-widest text-dim">
                   CATEGORY
                 </dt>
                 <dd className="text-sm text-primary-tx">
@@ -259,7 +261,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                 </dd>
               </div>
               <div>
-                <dt className="mb-1 text-xs font-semibold tracking-widest text-muted">
+                <dt className="mb-1 text-xs font-semibold tracking-widest text-dim">
                   RATING
                 </dt>
                 <dd className="flex items-center gap-2 text-sm text-primary-tx">
@@ -269,7 +271,7 @@ export default function ProductDetails({ product }: { product: Product }) {
               </div>
               {product.tags.length > 0 && (
                 <div className="sm:col-span-2">
-                  <dt className="mb-2 text-xs font-semibold tracking-widest text-muted">
+                  <dt className="mb-2 text-xs font-semibold tracking-widest text-dim">
                     TAGS
                   </dt>
                   <dd className="flex flex-wrap gap-2">
@@ -301,7 +303,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                           <p className="text-sm font-semibold text-primary-tx">
                             {review.reviewerName}
                           </p>
-                          <p className="text-xs text-muted">
+                          <p className="text-xs text-dim">
                             {new Date(review.date).toLocaleDateString("en-US", {
                               year: "numeric",
                               month: "long",

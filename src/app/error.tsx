@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle, RotateCcw } from "lucide-react";
+import { Button } from "@/components/UI/button";
 
 export default function Error({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
@@ -18,14 +19,14 @@ export default function Error({ reset }: { error: Error & { digest?: string }; r
         <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-secondary-tx sm:text-base">
           A temporary issue interrupted your visit. Please try again—we’ll pick up right where you left off.
         </p>
-        <button
+        <Button
           type="button"
           onClick={reset}
-          className="mt-8 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-inverse px-5 py-3 text-sm font-bold text-primary-bg transition-colors hover:bg-inverse/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="mt-8 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-inverse px-5 py-3 h-auto text-sm font-bold text-primary-bg transition-colors hover:bg-inverse/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           <RotateCcw className="h-4 w-4" aria-hidden="true" />
           TRY AGAIN
-        </button>
+        </Button>
       </div>
     </section>
   );

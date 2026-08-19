@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Inter, Geist } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { ToastProvider } from "@/components/UI/ToastProvider";
+import { Toaster } from "@/components/UI/sonner";
 import CartAuthSync from "@/components/cart/CartAuthSync";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "Stride | Home",
@@ -23,19 +26,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang="en" data-scroll-behavior="smooth" className={cn("font-sans", geist.variable)}>
       <head>
         
       </head>
       <body
         className={`${inter.variable} bg-primary-bg text-primary-tx flex flex-col min-h-dvh`}
       >
-        <ToastProvider>
-          <Header />
-          <CartAuthSync />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </ToastProvider>
+        <Header />
+        <CartAuthSync />
+        <main className="flex-1">{children}</main>
+        <Footer />
+        <Toaster position="bottom-right" richColors />
       </body>
     </html>
   );

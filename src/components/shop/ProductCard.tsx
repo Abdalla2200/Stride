@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
 import { formatPrice } from "@/utils/utils";
-import StarRating from "./StartRating";
-import AddToCartBtn from "../cart/AddToCartBtn";
+import StarRating from "@/components/shop/StartRating";
+import AddToCartBtn from "@/components/cart/AddToCartBtn";
 
 export default function ProductCard({
   product,
@@ -34,7 +34,7 @@ export default function ProductCard({
       </Link>
 
       <div className="flex flex-1 flex-col">
-        <p className="mb-1 text-[11px] font-semibold tracking-widest text-muted">
+        <p className="mb-1 text-[11px] font-semibold tracking-widest text-dim">
           {label}
         </p>
 
@@ -53,7 +53,7 @@ export default function ProductCard({
             {formatPrice(salePrice)}
           </span>
           {hasDiscount && (
-            <span className="text-sm text-muted line-through">
+            <span className="text-sm text-dim line-through">
               {formatPrice(product.price)}
             </span>
           )}

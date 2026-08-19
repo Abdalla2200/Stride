@@ -3,18 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import registerImage from "@/assets/register-Image.png";
 import { registerUserAction } from "@/actions/auth";
 import { useForm } from "react-hook-form";
 import { RegisterFormData, registerSchema } from "@/utils/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { useToast } from "@/components/UI/ToastProvider";
 import GoogleAuthButton from "@/components/auth/GoogleAuthButton";
+import { Button } from "@/components/UI/button";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { showToast } = useToast();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -36,7 +36,7 @@ export default function RegisterPage() {
       if (result.status === "error") {
         setServerError(result.message);
       } else if (result.status === "success") {
-        showToast("Account created successfully. Welcome to STRIDE!");
+        toast.success("Account created successfully. Welcome to STRIDE!");
         router.push("/cart");
       }
     } finally {
@@ -163,13 +163,13 @@ export default function RegisterPage() {
                 )}
               </div>
             </div>
-            <button
+            <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-md bg-stone-100 py-3.5 text-[10px] font-bold tracking-[0.16em] text-stone-950 transition hover:bg-stone-300 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-md bg-stone-100 py-3.5 h-auto text-[10px] font-bold tracking-[0.16em] text-stone-950 hover:bg-stone-300 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? "CREATING ACCOUNT..." : "CREATE ACCOUNT"}
-            </button>
+            </Button>
           </form>
           <div className="my-6 flex items-center gap-3 text-[10px] text-stone-500">
             <span className="h-px flex-1 bg-white/15" />

@@ -17,7 +17,7 @@ export default function CartIcon() {
         strokeWidth={1.75}
       />
       {displayedQuantity > 0 && (
-        <span className="absolute -top-2.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold text-primary-tx">
+        <span className="absolute -top-2.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary-bg px-1 text-[10px] font-bold text-inverse">
           {displayedQuantity}
         </span>
       )}

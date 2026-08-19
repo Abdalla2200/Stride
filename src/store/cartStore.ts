@@ -15,12 +15,15 @@ export type CartItem = {
 
 type CartStore = {
   items: CartItem[];
+  /** True once CartAuthSync has completed its first server fetch. */
+  synced: boolean;
   addToCart: (product: Omit<CartItem, "quantity">) => void;
   removeFromCart: (id: number) => void;
   increaseQty: (id: number) => void;
   decreaseQty: (id: number) => void;
   clearCart: () => void;
   setItems: (items: CartItem[]) => void;
+  setSynced: (value: boolean) => void;
   getTotalPrice: () => number;
   getTotalQuantity: () => number;
 };
@@ -43,6 +46,7 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      synced: false,
       checkoutData: null,
 
       addToCart: (product) => {
@@ -113,6 +117,8 @@ export const useCartStore = create<CartStore>()(
 
       setItems: (items) => set({ items }),
 
+      setSynced: (value) => set({ synced: value }),
+
       getTotalQuantity: () =>
         get().items.reduce((total, item) => total + item.quantity, 0),
       getTotalPrice: () =>
@@ -123,6 +129,9 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: "cart-storage",
+      // `synced` is runtime-only — never persist it. It always starts as false
+      // so CartAuthSync must complete a fetch before the cart page renders.
+      partialize: (state) => ({ items: state.items }),
     },
   ),
 );
